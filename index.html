@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário Mágico</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: darkmagenta;
+            color: white;
+        }
+        #inventory{
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            gap: 10px;
+            background: purple;
+            padding: 20px;
+            border-radius: 10px;
+            width: max-content;
+            margin: 20px auto;
+        }
+        .slot{
+            width: 60px;
+            height: 60px;
+            background: purple;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .slot img{
+            max-width: 80%;
+            max-height: 80%;
+        }
+        .remove{
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        input, button{
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        button{
+            cursor: pointer;
+        }
+        button:active{
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inventário Mágico</h1>
+    <input type="text" id="itemInput" placeholder="Digite um item...">
+    <button onclick="addItem()">Adicionar item</button>
+    <div id="inventory"></div>
+    <p id="message"></p>
+
+    <script>
+        const itemImages = {
+            "espada": "sword.png",
+            "cajado": "staff.png",
+            "arco": "bow.png",
+            "flecha": "arrow.png",
+            "escudo": "shield.png",
+            "lança": "spear.png",
+            "ovo de dragão": "dragon-egg.png",
+            "poção de cura": "health-potion.png",
+            "poção de mana": "mana-potion.png"
+        };
+        let inventory = [];
+        const maxSlots = 10;
+
+        function addItem() {
+            let itemName = document.getElementById("itemInput").value.toLowerCase();
+            
+            if(!itemImages[itemName]) {
+                document.getElementById("message").innerText = "Item não encontrado";
+                return;
+            }
+            if(inventory.length >= maxSlots) {
+                document.getElementById("message").innerText = "Inventário cheio!";
+                return;
+            }
+            inventory.push(itemName);
+            
+            updateInventory();
+
+            document.getElementById("itemInput").value = "";      
+            document.getElementById("message").innerText = "";      
+        }
+        
+        function removeItem(index) {
+            inventory.splice(index,1);
+
+            updateInventory();
+        }
+
+        function updateInventory() {
+            let container = document.getElementById("inventory");
+            container.innerHTML = "";
+
+            inventory.forEach((item, index) => {
+                let slot = document.createElement("div");
+                slot.className = "slot";
+                slot.innerHTML = `<img src='${itemImages[item]}' alt='${item}'> <button class='remove' onclick='removeItem(${index})'>X</button>`;
+                container.appendChild(slot);
+            });
+        }
+    </script>
+</body>
+</html>
